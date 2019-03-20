@@ -3,6 +3,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
+using Smoke;
 
 namespace QaLight
 {
@@ -26,6 +27,49 @@ namespace QaLight
         }
 
         [Category("Smoke")]
+
+        [Test]
+
+        public void SmokeTestWithPageObject_Negative()
+        {
+
+            //Arrange
+
+            //Act
+            OldQaLightPage oldQaLightPage = new OldQaLightPage(driver);
+            var course = oldQaLightPage.course;
+           
+            SelectElement courseDropdown = new SelectElement(course);
+            courseDropdown.SelectByIndex(3);
+
+            oldQaLightPage.surnameField.SendKeys("Surname");
+
+            oldQaLightPage.NameField.SendKeys("Name");
+
+
+            // Assert
+
+            Assert.True(IsElementPresent(oldQaLightPage.errorRegistrationPopup),
+                $"Element  {nameof  (oldQaLightPage.errorRegistrationPopup)} is not present on the page");
+
+        }
+
+        public bool IsElementPresent (IWebElement element)
+       
+            {
+            try
+            {
+                var result = element.Displayed;
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+            throw new Exception("Unexpected Exeption");
+        }
+
+              [Category("Smoke")]
         [Test]
         public void SmokeTest()
         {
